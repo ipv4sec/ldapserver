@@ -7,6 +7,12 @@ func NewBindResponse(resultCode int) ldap.BindResponse {
 	r.SetResultCode(resultCode)
 	return r
 }
+func NewBindResponseSasl(resultCode int, saslData *ldap.OCTETSTRING) ldap.BindResponse {
+	r := ldap.BindResponse{}
+	r.SetResultCode(resultCode)
+	r.SetSaslData(saslData)
+	return r
+}
 
 func NewResponse(resultCode int) ldap.LDAPResult {
 	r := ldap.LDAPResult{}
