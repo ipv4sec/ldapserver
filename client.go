@@ -11,6 +11,7 @@ import (
 
 type client struct {
 	Numero      int
+	customData  interface{}
 	srv         *Server
 	rwc         net.Conn
 	br          *bufio.Reader
@@ -47,6 +48,14 @@ func (c *client) GetMessageByID(messageID int) (*Message, bool) {
 
 func (c *client) Addr() net.Addr {
 	return c.rwc.RemoteAddr()
+}
+
+func (c *client) GetCustomData() interface{} {
+	return c.customData
+}
+
+func (c *client) SetCustomData(customData interface{}) {
+	c.customData = customData
 }
 
 func (c *client) ReadPacket() (*messagePacket, error) {
