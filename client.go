@@ -217,6 +217,7 @@ func (c *client) writeMessage(m *ldap.LDAPMessage) {
 type ResponseWriter interface {
 	// Write writes the LDAPResponse to the connection as part of an LDAP reply.
 	Write(po ldap.ProtocolOp)
+	WriteControls(po ldap.ProtocolOp, c *ldap.Controls)
 }
 
 type responseWriterImpl struct {
@@ -227,6 +228,13 @@ type responseWriterImpl struct {
 func (w responseWriterImpl) Write(po ldap.ProtocolOp) {
 	m := ldap.NewLDAPMessageWithProtocolOp(po)
 	m.SetMessageID(w.messageID)
+	w.chanOut <- m
+}
+
+func (w responseWriterImpl) WriteControls(po ldap.ProtocolOp, c *ldap.Controls) {
+	m := ldap.NewLDAPMessageWithProtocolOp(po)
+	m.SetMessageID(w.messageID)
+	m.SetControls(c)
 	w.chanOut <- m
 }
 
