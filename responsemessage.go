@@ -38,6 +38,12 @@ func NewModifyResponse(resultCode int) ldap.ModifyResponse {
 	return r
 }
 
+func NewModifyDNResponse(resultCode int) ldap.ModifyDNResponse {
+	r := ldap.ModifyDNResponse{}
+	r.SetResultCode(resultCode)
+	return r
+}
+
 func NewDeleteResponse(resultCode int) ldap.DelResponse {
 	r := ldap.DelResponse{}
 	r.SetResultCode(resultCode)
