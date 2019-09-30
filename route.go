@@ -13,6 +13,7 @@ const (
 	COMPARE  = "CompareRequest"
 	ADD      = "AddRequest"
 	MODIFY   = "ModifyRequest"
+	MODRDN   = "ModifyDNRequest"
 	DELETE   = "DelRequest"
 	EXTENDED = "ExtendedRequest"
 	ABANDON  = "AbandonRequest"
@@ -225,6 +226,14 @@ func (h *RouteMux) Delete(handler HandlerFunc) *route {
 func (h *RouteMux) Modify(handler HandlerFunc) *route {
 	route := &route{}
 	route.operation = MODIFY
+	route.handler = handler
+	h.addRoute(route)
+	return route
+}
+
+func (h *RouteMux) ModifyDN(handler HandlerFunc) *route {
+	route := &route{}
+	route.operation = MODRDN
 	route.handler = handler
 	h.addRoute(route)
 	return route
