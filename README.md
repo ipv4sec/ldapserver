@@ -1,4 +1,4 @@
-[![GoDoc](https://godoc.org/github.com/videxio/ldapserver?status.svg)](https://godoc.org/github.com/videxio/ldapserver)
+[![GoDoc](https://godoc.org/github.com/openstandia/ldapserver?status.svg)](https://godoc.org/github.com/openstandia/ldapserver)
 [![Build Status](https://travis-ci.org/vjeantet/ldapserver.svg)](https://travis-ci.org/vjeantet/ldapserver)
 
 **This package is a work in progress.**
@@ -35,7 +35,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	ldap "github.com/videxio/ldapserver"
+	ldap "github.com/openstandia/ldapserver"
 )
 
 func main() {

@@ -3,7 +3,7 @@ package ldapserver
 import (
 	"fmt"
 
-	ldap "github.com/videxio/goldap/message"
+	ldap "github.com/openstandia/goldap/message"
 )
 
 type Message struct {

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	ldap "github.com/videxio/goldap/message"
+	ldap "github.com/openstandia/goldap/message"
 )
 
 type messagePacket struct {
