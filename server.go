@@ -9,11 +9,12 @@ import (
 
 // Server is an LDAP server.
 type Server struct {
-	Listener     net.Listener
-	ReadTimeout  time.Duration  // optional read timeout
-	WriteTimeout time.Duration  // optional write timeout
-	wg           sync.WaitGroup // group of goroutines (1 by client)
-	chDone       chan bool      // Channel Done, value => shutdown
+	Listener       net.Listener
+	ReadTimeout    time.Duration  // optional read timeout
+	WriteTimeout   time.Duration  // optional write timeout
+	MaxRequestSize int            // optional max request size (analogous to the maxBERSize  of the Sun Java System Directory Server)
+	wg             sync.WaitGroup // group of goroutines (1 by client)
+	chDone         chan bool      // Channel Done, value => shutdown
 
 	// OnNewConnection, if non-nil, is called on new connections.
 	// If it returns non-nil, the connection is closed.
@@ -117,10 +118,14 @@ func (s *Server) serve() error {
 // client has a writer and reader buffer
 func (s *Server) newClient(rwc net.Conn) (c *client, err error) {
 	c = &client{
-		srv: s,
-		rwc: rwc,
-		br:  bufio.NewReader(rwc),
-		bw:  bufio.NewWriter(rwc),
+		srv:            s,
+		rwc:            rwc,
+		br:             bufio.NewReader(rwc),
+		bw:             bufio.NewWriter(rwc),
+		maxRequestSize: s.MaxRequestSize,
+	}
+	if c.maxRequestSize <= 0 {
+		c.maxRequestSize = 5242880 // Default 5MB
 	}
 	return c, nil
 }

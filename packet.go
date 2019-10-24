@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	"io"
 
 	ldap "github.com/openstandia/goldap/message"
 )
@@ -12,10 +13,10 @@ type messagePacket struct {
 	bytes []byte
 }
 
-func readMessagePacket(br *bufio.Reader) (*messagePacket, error) {
+func readMessagePacket(br *bufio.Reader, maxRequestSize int) (*messagePacket, error) {
 	var err error
 	var bytes *[]byte
-	bytes, err = readLdapMessageBytes(br)
+	bytes, err = readLdapMessageBytes(br, maxRequestSize)
 
 	if err == nil {
 		messagePacket := &messagePacket{bytes: *bytes}
@@ -48,11 +49,15 @@ func decodeMessage(bytes []byte) (ret ldap.LDAPMessage, err error) {
 
 // BELLOW SHOULD BE IN ROOX PACKAGE
 
-func readLdapMessageBytes(br *bufio.Reader) (ret *[]byte, err error) {
+func readLdapMessageBytes(br *bufio.Reader, maxRequestSize int) (ret *[]byte, err error) {
 	var bytes []byte
 	var tagAndLength ldap.TagAndLength
 	tagAndLength, err = readTagAndLength(br, &bytes)
 	if err != nil {
+		return
+	}
+	if tagAndLength.Length > maxRequestSize {
+		err = ldap.StructuralError{"request too large"}
 		return
 	}
 	readBytes(br, &bytes, tagAndLength.Length)
@@ -136,7 +141,7 @@ func readTagAndLength(conn *bufio.Reader, bytes *[]byte) (ret ldap.TagAndLength,
 // Return the last read byte
 func readBytes(conn *bufio.Reader, bytes *[]byte, length int) (b byte, err error) {
 	newbytes := make([]byte, length)
-	n, err := conn.Read(newbytes)
+	n, err := io.ReadFull(conn, newbytes)
 	if n != length {
 		fmt.Errorf("%d bytes read instead of %d", n, length)
 	} else if err != nil {

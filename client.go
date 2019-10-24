@@ -10,19 +10,20 @@ import (
 )
 
 type client struct {
-	Numero      int
-	customData  interface{}
-	srv         *Server
-	rwc         net.Conn
-	br          *bufio.Reader
-	bw          *bufio.Writer
-	chanOut     chan *ldap.LDAPMessage
-	wg          sync.WaitGroup
-	closing     chan bool
-	requestList map[int]*Message
-	mutex       sync.Mutex
-	writeDone   chan bool
-	rawData     []byte
+	Numero         int
+	customData     interface{}
+	maxRequestSize int
+	srv            *Server
+	rwc            net.Conn
+	br             *bufio.Reader
+	bw             *bufio.Writer
+	chanOut        chan *ldap.LDAPMessage
+	wg             sync.WaitGroup
+	closing        chan bool
+	requestList    map[int]*Message
+	mutex          sync.Mutex
+	writeDone      chan bool
+	rawData        []byte
 }
 
 func (c *client) GetConn() net.Conn {
@@ -62,7 +63,7 @@ func (c *client) SetCustomData(customData interface{}) {
 }
 
 func (c *client) ReadPacket() (*messagePacket, error) {
-	mP, err := readMessagePacket(c.br)
+	mP, err := readMessagePacket(c.br, c.maxRequestSize)
 	c.rawData = make([]byte, len(mP.bytes))
 	copy(c.rawData, mP.bytes)
 	return mP, err
