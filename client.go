@@ -142,7 +142,7 @@ func (c *client) serve() {
 
 		if err != nil {
 			Logger.Printf("Error reading Message : %s\n\t%x", err.Error(), messagePacket.bytes)
-			continue
+			return
 		}
 		Logger.Printf("<<< %d - %s - hex=%x", c.Numero, message.ProtocolOpName(), messagePacket)
 
