@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	ldap "github.com/openstandia/goldap/message"
+	ldap "github.com/cn-ldap/goldap/message"
 )
 
 type client struct {

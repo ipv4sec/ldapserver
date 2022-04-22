@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io"
 
-	ldap "github.com/openstandia/goldap/message"
+	ldap "github.com/cloudldap/goldap/message"
 )
 
 type messagePacket struct {

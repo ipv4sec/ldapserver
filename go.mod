@@ -1,5 +1,8 @@
-module github.com/openstandia/ldapserver
+module github.com/cloudldap/ldapserver
 
-go 1.13
+go 1.18
 
-require github.com/openstandia/goldap/message v0.0.0-20190930164115-c85f897c8e61
+require github.com/cloudldap/goldap/message v0.0.0-20220624044827-7916bfae1b74 // indirect
+
+// replace github.com/cloudldap/goldap/message => ../goldap/message
+// replace github.com/cloudldap/ldapserver => ../ldapserver

@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	ldap "github.com/videxio/ldapserver"
+	ldap "github.com/cloudldap/ldapserver"
 )
 
 // localhostCert is a PEM-encoded TLS cert with SAN DNS names

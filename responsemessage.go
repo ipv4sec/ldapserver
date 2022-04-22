@@ -1,6 +1,6 @@
 package ldapserver
 
-import ldap "github.com/openstandia/goldap/message"
+import ldap "github.com/cloudldap/goldap/message"
 
 func NewBindResponse(resultCode int) ldap.BindResponse {
 	r := ldap.BindResponse{}

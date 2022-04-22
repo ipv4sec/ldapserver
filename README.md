@@ -1,29 +1,33 @@
-[![GoDoc](https://godoc.org/github.com/openstandia/ldapserver?status.svg)](https://godoc.org/github.com/openstandia/ldapserver)
-[![Build Status](https://travis-ci.org/vjeantet/ldapserver.svg)](https://travis-ci.org/vjeantet/ldapserver)
+[![GoDoc](https://godoc.org/github.com/cloudldap/ldapserver?status.svg)](https://godoc.org/github.com/cloudldap/ldapserver)
 
 **This package is a work in progress.**
 
 **ldapserver** is a helper library for building server software capable of speaking the LDAP protocol. This could be an alternate implementation of LDAP, a custom LDAP proxy or even a completely different backend capable of "masquerading" its API as a LDAP Server.
 
-The package supports 
-* All basic LDAP Operations (bind, search, add, compare, modify, delete, extended)
-* SSL
-* StartTLS
-* Unbind request is implemented, but is handled internally to close the connection.
-* Graceful stopping
-* Basic request routing inspired by [net/http ServeMux](http://golang.org/pkg/net/http/#ServeMux)
-* Logger customisation (log interface)
+The package supports
+
+- All basic LDAP Operations (bind, search, add, compare, modify, delete, extended)
+- SSL
+- StartTLS
+- Unbind request is implemented, but is handled internally to close the connection.
+- Graceful stopping
+- Basic request routing inspired by [net/http ServeMux](http://golang.org/pkg/net/http/#ServeMux)
+- Logger customisation (log interface)
 
 # Default behaviors
+
 ## Abandon request
+
 If you don't set a route to handle AbandonRequest, the package will handle it for you. (signal sent to message.Done chan)
 
 ## No Route Found
-When no route matches the request, the server will first try to call a special *NotFound* route, if nothing is specified, it will return an *UnwillingToResponse* Error code (53)
+
+When no route matches the request, the server will first try to call a special _NotFound_ route, if nothing is specified, it will return an _UnwillingToResponse_ Error code (53)
 
 Feel free to contribute, comment :)
 
-#  Sample Code
+# Sample Code
+
 ```Go
 // Listen to 10389 port for LDAP Request
 // and route bind request to the handleBind func
@@ -35,7 +39,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	ldap "github.com/openstandia/ldapserver"
+	ldap "github.com/cloudldap/ldapserver"
 )
 
 func main() {
@@ -80,4 +84,5 @@ func handleBind(w ldap.ResponseWriter, m *ldap.Message) {
 ```
 
 # more examples
+
 Look into the "examples" folder

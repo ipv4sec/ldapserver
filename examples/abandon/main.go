@@ -7,7 +7,7 @@ import (
 	"syscall"
 	"time"
 
-	ldap "github.com/videxio/ldapserver"
+	ldap "github.com/cloudldap/ldapserver"
 )
 
 func main() {
