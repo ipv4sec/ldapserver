@@ -2,6 +2,7 @@ package ldapserver
 
 import (
 	"bufio"
+	"context"
 	"net"
 	"sync"
 	"time"
@@ -245,11 +246,14 @@ func (w responseWriterImpl) WriteControls(po ldap.ProtocolOp, c *ldap.Controls) 
 func (c *client) ProcessRequestMessage(message *ldap.LDAPMessage) {
 	defer c.wg.Done()
 
+	ctx, cancel := context.WithCancel(context.Background())
+
 	var m Message
 	m = Message{
 		LDAPMessage: message,
-		Done:        make(chan bool, 2),
 		Client:      c,
+		Cancel:      cancel,
+		ctx:         ctx,
 	}
 
 	c.registerRequest(&m)

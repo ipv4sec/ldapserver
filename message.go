@@ -1,6 +1,7 @@
 package ldapserver
 
 import (
+	"context"
 	"fmt"
 
 	ldap "github.com/cloudldap/goldap/message"
@@ -9,17 +10,22 @@ import (
 type Message struct {
 	*ldap.LDAPMessage
 	Client *client
-	Done   chan bool
+	Cancel context.CancelFunc
+	ctx    context.Context
 }
 
 func (m *Message) String() string {
 	return fmt.Sprintf("MessageId=%d, %s", m.MessageID(), m.ProtocolOpName())
 }
 
-// Abandon close the Done channel, to notify handler's user function to stop any
+func (m *Message) Context() context.Context {
+	return m.ctx
+}
+
+// Abandon cancel the context, to notify handler's user function to stop any
 // running process
 func (m *Message) Abandon() {
-	m.Done <- true
+	m.Cancel()
 }
 
 func (m *Message) GetAbandonRequest() ldap.AbandonRequest {
