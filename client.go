@@ -7,12 +7,13 @@ import (
 	"sync"
 	"time"
 
-	ldap "github.com/cn-ldap/goldap/message"
+	ldap "github.com/cloudldap/goldap/message"
 )
 
 type client struct {
 	Numero         int
 	customData     interface{}
+	customResource Closable
 	maxRequestSize int
 	srv            *Server
 	rwc            net.Conn
@@ -25,6 +26,11 @@ type client struct {
 	mutex          sync.Mutex
 	writeDone      chan bool
 	rawData        []byte
+}
+
+type Closable interface {
+	// Close release all resources.
+	Close()
 }
 
 func (c *client) GetConn() net.Conn {
@@ -61,6 +67,14 @@ func (c *client) GetCustomData() interface{} {
 
 func (c *client) SetCustomData(customData interface{}) {
 	c.customData = customData
+}
+
+func (c *client) GetCustomResource() Closable {
+	return c.customResource
+}
+
+func (c *client) SetCustomResource(customResource Closable) {
+	c.customResource = customResource
 }
 
 func (c *client) ReadPacket() (*messagePacket, error) {
@@ -202,6 +216,12 @@ func (c *client) close() {
 	c.wg.Wait()      // wait for all current running request processor to end
 	close(c.chanOut) // No more message will be sent to client, close chanOUT
 	Logger.Printf("client [%d] request processors ended", c.Numero)
+
+	// release somthing if handlers has
+	if c.customResource != nil {
+		Logger.Printf("client %d close() - close custom resource", c.Numero)
+		c.customResource.Close()
+	}
 
 	<-c.writeDone // Wait for the last message sent to be written
 	c.rwc.Close() // close client connection
