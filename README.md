@@ -1,4 +1,4 @@
-[![GoDoc](https://godoc.org/github.com/cloudldap/ldapserver?status.svg)](https://godoc.org/github.com/cloudldap/ldapserver)
+[![GoDoc](https://godoc.org/github.com/ipv4sec/ldapserver?status.svg)](https://godoc.org/github.com/ipv4sec/ldapserver)
 
 **This package is a work in progress.**
 
@@ -39,7 +39,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	ldap "github.com/cloudldap/ldapserver"
+	ldap "github.com/ipv4sec/ldapserver"
 )
 
 func main() {
