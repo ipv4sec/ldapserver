@@ -25,7 +25,7 @@ type Server struct {
 	Handler Handler
 }
 
-//NewServer return a LDAP Server
+// NewServer return a LDAP Server
 func NewServer() *Server {
 	return &Server{
 		chDone: make(chan bool),
@@ -92,7 +92,7 @@ func (s *Server) serve() error {
 			rw.SetWriteDeadline(time.Now().Add(s.WriteTimeout))
 		}
 		if nil != err {
-			if opErr, ok := err.(*net.OpError); ok || opErr.Timeout() {
+			if opErr, ok := err.(*net.OpError); ok && opErr.Timeout() {
 				continue
 			}
 			Logger.Println(err)
